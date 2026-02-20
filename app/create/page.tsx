@@ -83,7 +83,7 @@ export default function CreateGoalPage() {
           >
             <label className="block text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
               <Clock size={20} />
-              When's the deadline?
+              When&apos;s the deadline?
             </label>
             <input
               type="datetime-local"

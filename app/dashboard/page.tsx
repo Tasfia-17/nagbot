@@ -20,7 +20,12 @@ export default function DashboardPage() {
     try {
       const response = await fetch('/api/goals?userId=demo-user&status=active');
       const data = await response.json();
-      setGoals(data.map((g: any) => ({ ...g, deadline: new Date(g.deadline) })));
+      setGoals(data.map((g: any) => ({ 
+        ...g, 
+        deadline: new Date(g.deadline),
+        verificationMethod: g.verification_method || 'manual',
+        status: g.status || 'active'
+      })));
     } catch (error) {
       console.error('Failed to fetch goals:', error);
     } finally {

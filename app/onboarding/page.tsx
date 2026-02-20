@@ -21,13 +21,13 @@ export default function OnboardingPage() {
             <MascotCharacter mood="happy" size={200} />
             <h2 className="text-4xl font-extrabold text-gray-800 mt-6">Meet NagBot!</h2>
             <p className="text-lg text-gray-600 mt-4">
-              I'm here to help you stay accountable. Set goals, and I'll make sure you follow through... or else. 😈
+              I&apos;m here to help you stay accountable. Set goals, and I&apos;ll make sure you follow through... or else. 😈
             </p>
             <button
               onClick={() => setStep(2)}
               className="mt-8 px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-xl"
             >
-              Let's Go!
+              Let&apos;s Go!
             </button>
           </>
         )}
@@ -37,7 +37,7 @@ export default function OnboardingPage() {
             <MascotCharacter mood="neutral" size={200} />
             <h2 className="text-4xl font-extrabold text-gray-800 mt-6">Connect Twitter</h2>
             <p className="text-lg text-gray-600 mt-4">
-              I need permission to post tweets on your behalf. Don't worry, I'll only tweet when you miss a deadline.
+              I need permission to post tweets on your behalf. Don&apos;t worry, I&apos;ll only tweet when you miss a deadline.
             </p>
             <div className="bg-accent/10 border-2 border-accent rounded-2xl p-4 mt-6">
               <p className="text-sm text-accent font-bold">⚠️ Required Permissions:</p>

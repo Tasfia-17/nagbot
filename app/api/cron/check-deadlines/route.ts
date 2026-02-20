@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { refreshTwitterToken, postTweet, verifyGitHubCommit } from '@/lib/twitter';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key';
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
@@ -13,6 +14,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const supabase = getSupabase();
   const now = new Date();
   const { data: goals, error } = await supabase
     .from('goals')
@@ -68,10 +70,10 @@ export async function GET(req: NextRequest) {
 
 async function verifyGoal(goal: any): Promise<boolean> {
   if (goal.verification_method === 'manual') {
-    return false; // Manual requires user action
+    return false;
   }
   
-  if (goal.verification_method === 'github' && goal.verification_data?.githubRepo) {
+  if (goal.verification_method === 'github' && goal.verification_data?.githubRepo && goal.users?.twitter_handle) {
     const since = new Date(goal.created_at);
     const until = new Date(goal.deadline);
     return await verifyGitHubCommit(
@@ -81,8 +83,6 @@ async function verifyGoal(goal: any): Promise<boolean> {
       until
     );
   }
-  
-  // Add Strava verification here
   
   return false;
 }

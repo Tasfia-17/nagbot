@@ -1,12 +1,9 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 export default function Header() {
-  const pathname = usePathname();
-  
   return (
     <motion.header
       initial={{ y: -100 }}
