@@ -1,14 +1,13 @@
+'use client';
+
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'NagBot - Accountability Through Public Shame',
-  description: 'Set goals, write shame tweets, and let fear of embarrassment keep you accountable.',
-};
 
 export default function RootLayout({
   children,
@@ -17,33 +16,66 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background min-h-screen`}>
-        <header className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white font-bold text-xl">
-                🤖
-              </div>
-              <h1 className="text-2xl font-extrabold text-gray-800 tracking-tight">NagBot</h1>
-            </Link>
-            <nav className="flex gap-4">
-              <Link href="/dashboard">
-                <button className="px-4 py-2 rounded-xl bg-white/60 hover:bg-white/80 transition-all hover:scale-105 font-medium text-gray-700">
-                  Dashboard
-                </button>
-              </Link>
-              <Link href="/create">
-                <button className="px-4 py-2 rounded-xl bg-primary text-white hover:scale-105 transition-all font-medium shadow-lg">
-                  New Goal
-                </button>
-              </Link>
-            </nav>
-          </div>
-        </header>
-        <main className="max-w-7xl mx-auto px-4 py-8">
-          {children}
-        </main>
+      <body className={`${inter.className} min-h-screen overflow-x-hidden`}>
+        <Header />
+        <AnimatePresence mode="wait">
+          <motion.main
+            key={usePathname()}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-7xl mx-auto px-4 py-8 relative z-10"
+          >
+            {children}
+          </motion.main>
+        </AnimatePresence>
       </body>
     </html>
+  );
+}
+
+function Header() {
+  return (
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="bg-white/20 backdrop-blur-2xl border-b border-white/30 shadow-2xl sticky top-0 z-50"
+    >
+      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 group">
+          <motion.div
+            whileHover={{ rotate: 360, scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+            className="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-3xl flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+          >
+            🤖
+          </motion.div>
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight">
+            NagBot
+          </h1>
+        </Link>
+        <nav className="flex gap-3">
+          <Link href="/dashboard">
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 rounded-2xl bg-white/40 backdrop-blur-xl hover:bg-white/60 transition-all font-bold text-gray-800 shadow-lg border border-white/40"
+            >
+              Dashboard
+            </motion.button>
+          </Link>
+          <Link href="/create">
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-xl border border-white/20"
+            >
+              New Goal
+            </motion.button>
+          </Link>
+        </nav>
+      </div>
+    </motion.header>
   );
 }

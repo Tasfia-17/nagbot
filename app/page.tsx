@@ -1,29 +1,68 @@
+'use client';
+
 import MascotCharacter from '@/components/MascotCharacter';
 import Link from 'next/link';
+import ForestBackground from '@/components/backgrounds/ForestBackground';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
-      <MascotCharacter mood="happy" size={250} />
-      <h2 className="text-5xl font-extrabold text-gray-800 mt-8 tracking-tight">
-        Welcome to NagBot
-      </h2>
-      <p className="text-xl text-gray-600 mt-4 max-w-2xl">
-        The accountability tool that keeps you honest through the power of public shame.
-        Set goals, write embarrassing tweets, and let fear be your motivator.
-      </p>
-      <div className="flex gap-4 mt-8">
-        <Link href="/create">
-          <button className="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-xl">
-            Get Started
-          </button>
-        </Link>
-        <Link href="/dashboard">
-          <button className="px-8 py-4 bg-white/80 backdrop-blur-xl text-gray-800 rounded-2xl font-bold text-lg hover:scale-105 transition-all shadow-xl border border-white/20">
-            View Dashboard
-          </button>
-        </Link>
+    <>
+      <ForestBackground />
+      <div className="flex flex-col items-center justify-center min-h-[85vh] text-center relative z-10">
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', duration: 0.8 }}
+        >
+          <MascotCharacter mood="happy" size={280} />
+        </motion.div>
+        
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-6xl font-extrabold text-gray-800 mt-8 tracking-tight drop-shadow-lg"
+        >
+          Welcome to NagBot
+        </motion.h2>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-2xl text-gray-700 mt-6 max-w-2xl font-medium drop-shadow"
+        >
+          The accountability tool that keeps you honest through the power of public shame.
+          Set goals, write embarrassing tweets, and let fear be your motivator.
+        </motion.p>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="flex gap-6 mt-10"
+        >
+          <Link href="/create">
+            <motion.button
+              whileHover={{ scale: 1.08, y: -3 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-10 py-5 bg-gradient-to-r from-primary to-secondary text-white rounded-3xl font-bold text-xl shadow-2xl border-2 border-white/30"
+            >
+              Get Started 🚀
+            </motion.button>
+          </Link>
+          <Link href="/dashboard">
+            <motion.button
+              whileHover={{ scale: 1.08, y: -3 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-10 py-5 bg-white/30 backdrop-blur-2xl text-gray-800 rounded-3xl font-bold text-xl shadow-2xl border-2 border-white/40"
+            >
+              View Dashboard 📊
+            </motion.button>
+          </Link>
+        </motion.div>
       </div>
-    </div>
+    </>
   );
 }
