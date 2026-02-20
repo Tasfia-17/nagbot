@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { refreshTwitterToken, postTweet, verifyGitHubCommit } from '@/lib/twitter';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,13 +34,31 @@ export async function GET(req: NextRequest) {
         .from('goals')
         .update({ status: 'completed', completed_at: now.toISOString() })
         .eq('id', goal.id);
+      
+      await supabase.rpc('increment', { row_id: goal.user_id, column_name: 'completed_goals' });
+      await supabase.rpc('increment', { row_id: goal.user_id, column_name: 'streak' });
+      
       results.push({ goalId: goal.id, status: 'completed' });
     } else {
-      const tweeted = await postShameTweet(goal);
+      let accessToken = goal.users.twitter_access_token;
+      
+      // Try to refresh token if needed
+      const refreshed = await refreshTwitterToken(goal.users.twitter_refresh_token);
+      if (refreshed) {
+        accessToken = refreshed;
+        await supabase
+          .from('users')
+          .update({ twitter_access_token: refreshed })
+          .eq('id', goal.user_id);
+      }
+      
+      const tweeted = await postTweet(accessToken, goal.shame_tweet_text);
+      
       await supabase
         .from('goals')
         .update({ status: 'failed', tweeted_at: now.toISOString() })
         .eq('id', goal.id);
+      
       results.push({ goalId: goal.id, status: 'failed', tweeted });
     }
   }
@@ -51,23 +70,19 @@ async function verifyGoal(goal: any): Promise<boolean> {
   if (goal.verification_method === 'manual') {
     return false; // Manual requires user action
   }
-  // Add GitHub, Strava, webhook verification logic here
-  return false;
-}
-
-async function postShameTweet(goal: any): Promise<boolean> {
-  try {
-    const response = await fetch('https://api.twitter.com/2/tweets', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${goal.users.twitter_access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: goal.shame_tweet_text }),
-    });
-    return response.ok;
-  } catch (error) {
-    console.error('Failed to post tweet:', error);
-    return false;
+  
+  if (goal.verification_method === 'github' && goal.verification_data?.githubRepo) {
+    const since = new Date(goal.created_at);
+    const until = new Date(goal.deadline);
+    return await verifyGitHubCommit(
+      goal.verification_data.githubRepo,
+      goal.users.twitter_handle,
+      since,
+      until
+    );
   }
+  
+  // Add Strava verification here
+  
+  return false;
 }
