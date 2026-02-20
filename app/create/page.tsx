@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Target, Clock, Twitter } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import ShameTweetPreview from '@/components/ShameTweetPreview';
 
 export default function CreateGoalPage() {
   const router = useRouter();
@@ -119,6 +120,13 @@ export default function CreateGoalPage() {
           <div className="text-right text-sm text-gray-500 mt-1">
             {formData.shameTweet.length}/280
           </div>
+          
+          {formData.shameTweet && (
+            <div className="mt-4">
+              <p className="text-sm font-bold text-gray-700 mb-2">Preview:</p>
+              <ShameTweetPreview text={formData.shameTweet} />
+            </div>
+          )}
         </div>
 
         {/* Submit */}
