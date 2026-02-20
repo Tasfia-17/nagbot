@@ -2,41 +2,45 @@
 
 A web-based accountability tool that uses the fear of public embarrassment to keep you on track with your goals.
 
-## Features
+![NagBot](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-- 🤖 Cute, animated mascot that reacts to your progress
-- ⏰ Real-time countdown timers with visual urgency indicators
-- 🐦 Automatic shame tweet posting for missed deadlines
-- ✅ Multiple verification methods (manual, GitHub, Strava, webhook)
-- 🎨 Beautiful glassmorphism UI with smooth animations
-- 🎉 Celebration effects for completed goals
+## 🤖 Features
 
-## Tech Stack
+- **Animated Mascot** - Cute robot character that reacts to your progress with 5 mood states
+- **Real-time Countdowns** - Visual urgency indicators with color-coded progress rings
+- **Automatic Shame Tweets** - Miss a deadline? Your embarrassing tweet goes public automatically
+- **Multiple Verification Methods**:
+  - ✅ Manual check-in
+  - 🔧 GitHub commit verification
+  - 🏃 Strava activity tracking
+  - 🔗 Custom webhook integration
+- **Beautiful UI** - Glassmorphism design with smooth Framer Motion animations
+- **Celebration Effects** - Confetti animations when you complete goals
 
-- Next.js 14 (App Router) + TypeScript
-- Tailwind CSS + Framer Motion
-- Supabase (PostgreSQL)
-- Twitter API v2
-- NextAuth.js
+## 🚀 Tech Stack
 
-## Setup
+- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: NextAuth.js with Twitter OAuth 2.0
+- **APIs**: Twitter API v2, GitHub API
+- **Deployment**: Vercel with Cron Jobs
 
-1. Clone and install dependencies:
+## 📦 Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Tasfia-17/nagbot.git
+cd nagbot
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Set up Supabase:
-   - Create a new project at supabase.com
-   - Run the SQL in `supabase-schema.sql`
-   - Copy your project URL and anon key
-
-3. Set up Twitter Developer Account:
-   - Create app at developer.twitter.com
-   - Enable OAuth 2.0 with read+write permissions
-   - Add callback URL: `https://yourdomain.com/api/auth/callback/twitter`
-
-4. Configure environment variables in `.env.local`:
+3. Set up environment variables (copy `.env.example` to `.env.local`):
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -48,42 +52,86 @@ TWITTER_CLIENT_SECRET=your_twitter_client_secret
 CRON_SECRET=your_cron_secret
 ```
 
-5. Run development server:
+4. Set up Supabase:
+   - Create a new project at [supabase.com](https://supabase.com)
+   - Run the SQL in `supabase-schema.sql` in the SQL editor
+   - Copy your project URL and keys to `.env.local`
+
+5. Set up Twitter Developer Account:
+   - Create an app at [developer.twitter.com](https://developer.twitter.com)
+   - Enable OAuth 2.0 with read+write permissions
+   - Add callback URL: `http://localhost:3000/api/auth/callback/twitter`
+   - Copy your client ID and secret to `.env.local`
+
+6. Run the development server:
 ```bash
 npm run dev
 ```
 
-## Deployment
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-Deploy to Vercel:
-```bash
-vercel
+## 🎯 How It Works
+
+1. **Create a Goal** - Set a deadline and write an embarrassing tweet
+2. **Choose Verification** - Select how you'll prove completion
+3. **Stay Accountable** - Watch the countdown timer tick down
+4. **Complete or Face Shame** - Mark it done or your tweet goes public
+
+## 📁 Project Structure
+
+```
+nagbot/
+├── app/
+│   ├── api/              # API routes
+│   │   ├── auth/         # NextAuth handlers
+│   │   ├── cron/         # Deadline checking cron job
+│   │   ├── goals/        # Goal CRUD operations
+│   │   └── webhooks/     # Webhook verification
+│   ├── create/           # Goal creation page
+│   ├── dashboard/        # Main dashboard
+│   ├── onboarding/       # User onboarding flow
+│   └── layout.tsx        # Root layout
+├── components/
+│   ├── MascotCharacter.tsx    # Animated robot mascot
+│   ├── CountdownTimer.tsx     # Circular progress timer
+│   ├── GoalCard.tsx           # Goal display card
+│   ├── Confetti.tsx           # Celebration animation
+│   └── ShameTweetPreview.tsx  # Tweet preview
+├── lib/
+│   ├── supabase.ts       # Supabase client
+│   └── twitter.ts        # Twitter/GitHub API helpers
+├── types/
+│   └── index.ts          # TypeScript definitions
+└── supabase-schema.sql   # Database schema
+
 ```
 
-The cron job will automatically run every 15 minutes to check deadlines.
+## 🎨 Design System
 
-## How It Works
+- **Colors**: Violet primary, Emerald success, Rose danger
+- **Typography**: Inter font family
+- **Shapes**: Rounded corners (16-24px)
+- **Effects**: Glassmorphism, soft shadows, smooth animations
 
-1. **Create Goal**: Set a goal with a deadline and write an embarrassing tweet
-2. **Choose Verification**: Select how you'll prove completion (manual check-in, GitHub commit, Strava activity, or webhook)
-3. **Stay Accountable**: Watch the countdown timer and complete your goal
-4. **Face Consequences**: If you miss the deadline, your shame tweet gets posted automatically
-
-## Components
-
-- `MascotCharacter` - Animated robot with mood states
-- `CountdownTimer` - Circular progress timer with color shifts
-- `GoalCard` - Glassmorphism card with goal details
-- Dashboard - Overview of all active goals
-- Create Goal - Multi-step goal creation wizard
-
-## Security
+## 🔒 Security
 
 - Twitter tokens encrypted at rest
 - Rate limiting on shame tweets (max 1/hour per user)
 - Cron endpoint protected with secret token
 - Destructive actions require confirmation
 
-## License
+## 📝 License
 
-MIT
+MIT License - feel free to use this project for your own accountability needs!
+
+## 🤝 Contributing
+
+Contributions welcome! Feel free to open issues or submit pull requests.
+
+## ⚠️ Disclaimer
+
+This app will actually post tweets to your Twitter account if you miss deadlines. Use responsibly and choose your shame tweets wisely!
+
+---
+
+Built with 💜 by the NagBot team
